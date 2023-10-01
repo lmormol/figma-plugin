@@ -17,7 +17,7 @@ export const getAliasVariableName = (
   const collectionName = collectionObj.name;
 
   // console.log("collectionObj", collectionObj);
-  // console.log("modeName", modeName);
+  console.log("modeName", modeName);
   // console.log("modesAmount", modesAmount);
 
   const valueKey = getTokenKeyName(isDTCGForamt).value;
@@ -28,7 +28,7 @@ export const getAliasVariableName = (
   const variableParts = variableName.split("/");
   const aliasName = `{${collectionName}.${variableParts.join(
     "."
-  )}${isValueKeyIncluded}}`;
+  )}${isValueKeyIncluded}.${modeName}}`;
 
   return aliasName;
 };
