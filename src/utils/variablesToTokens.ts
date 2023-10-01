@@ -1,6 +1,8 @@
 import { normalizeValue } from "./normalizeValue";
 import { normilizeType } from "./normilizeType";
 import { getTokenKeyName } from "./getTokenKeyName";
+import { groupObjectBySlashKeys } from "./groupObjectBySlashKeys";
+import { wrapLastObjectInGroup } from "./wrapLastObjectInGroup";
 
 import { groupObjectNamesIntoCategories } from "./groupObjectNamesIntoCategories";
 
@@ -18,8 +20,11 @@ export const variablesToTokens = async (
 
   const mergedVariables = {};
 
+  console.log("collections", collections);
+
   collections.forEach((collection) => {
-    let modes = {};
+    // let modes = {};
+    let objects = {};
 
     const collectionName = collection.name;
     const isScopesIncluded = JSONSettingsConfig.includeScopes;
@@ -27,6 +32,9 @@ export const variablesToTokens = async (
 
     collection.modes.forEach((mode, index) => {
       const modeName = mode.name;
+
+      console.log("modeName", modeName);
+      console.log("variables", variables);
 
       const variablesPerMode = variables.reduce((result, variable) => {
         const variableModeId = Object.keys(variable.valuesByMode)[index];
@@ -38,7 +46,6 @@ export const variablesToTokens = async (
             [keyNames.type]: normilizeType(variable.resolvedType),
             [keyNames.value]: normalizeValue({
               modeName,
-              modesAmount,
               variableType: variable.resolvedType,
               variableValue: variable.valuesByMode[variableModeId],
               colorMode,
@@ -56,23 +63,26 @@ export const variablesToTokens = async (
             },
           } as PluginTokenI;
 
-          result[variable.name] = variableObject;
+          console.log("modeName", modeName);
+
+          const variableName =
+            modesAmount === 1 ? variable.name : `${variable.name}/${modeName}`;
+
+          result[variableName] = variableObject;
         }
 
         return result;
       }, {});
 
-      // check amount of modes and assign to "modes" or "modes[modeName]" variable
-      if (modesAmount === 1) {
-        Object.assign(modes, groupObjectNamesIntoCategories(variablesPerMode));
-      } else {
-        modes[modeName] = groupObjectNamesIntoCategories(variablesPerMode);
-      }
+      console.log("variablesPerMode", Object.keys(variablesPerMode)[0]);
+
+      Object.assign(objects, variablesPerMode);
     });
 
-    // console.log("modes", modes);
+    console.log("objects", objects);
+    console.log(">>>>>>>>>>>>>>>>>>>");
 
-    mergedVariables[collectionName] = modes;
+    mergedVariables[collectionName] = groupObjectBySlashKeys(objects);
   });
 
   return mergedVariables;
