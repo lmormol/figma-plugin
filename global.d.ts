@@ -107,6 +107,8 @@ interface PluginTokenI {
   $extensions: {
     variableId: string;
     aliasPath: string;
+    modeId: string;
+    modeName: string;
   };
 }
 

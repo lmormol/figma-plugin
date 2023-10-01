@@ -2,6 +2,7 @@ import { normalizeValue } from "./normalizeValue";
 import { normilizeType } from "./normilizeType";
 import { getTokenKeyName } from "./getTokenKeyName";
 import { groupObjectBySlashKeys } from "./groupObjectBySlashKeys";
+import { getAliasVariableName } from "./getAliasVariableName";
 import { wrapLastObjectInGroup } from "./wrapLastObjectInGroup";
 
 import { groupObjectNamesIntoCategories } from "./groupObjectNamesIntoCategories";
@@ -21,6 +22,7 @@ export const variablesToTokens = async (
   const mergedVariables = {};
 
   console.log("collections", collections);
+  console.log("variables", variables);
 
   collections.forEach((collection) => {
     // let modes = {};
@@ -33,9 +35,6 @@ export const variablesToTokens = async (
     collection.modes.forEach((mode, index) => {
       const modeName = mode.name;
 
-      console.log("modeName", modeName);
-      console.log("variables", variables);
-
       const variablesPerMode = variables.reduce((result, variable) => {
         const variableModeId = Object.keys(variable.valuesByMode)[index];
 
@@ -45,7 +44,6 @@ export const variablesToTokens = async (
           const variableObject = {
             [keyNames.type]: normilizeType(variable.resolvedType),
             [keyNames.value]: normalizeValue({
-              modeName,
               variableType: variable.resolvedType,
               variableValue: variable.valuesByMode[variableModeId],
               colorMode,
@@ -60,10 +58,19 @@ export const variablesToTokens = async (
             // add meta
             $extensions: {
               variableId: variable.id,
+              aliasPath: getAliasVariableName(
+                variable.id,
+                modeName,
+                modesAmount,
+                isDTCGForamt,
+                includeValueAliasString
+              ),
+              modeId: variableModeId,
+              modeName,
             },
           } as PluginTokenI;
 
-          console.log("modeName", modeName);
+          // console.log("modeName", modeName);
 
           const variableName =
             modesAmount === 1 ? variable.name : `${variable.name}/${modeName}`;
@@ -74,12 +81,10 @@ export const variablesToTokens = async (
         return result;
       }, {});
 
-      console.log("variablesPerMode", Object.keys(variablesPerMode)[0]);
-
       Object.assign(objects, variablesPerMode);
     });
 
-    console.log("objects", objects);
+    // console.log("objects", objects);
     console.log(">>>>>>>>>>>>>>>>>>>");
 
     mergedVariables[collectionName] = groupObjectBySlashKeys(objects);

@@ -1,8 +1,7 @@
-import { getAliasVariableName } from "./getAliasVariableName";
+// import { getAliasVariableName } from "./getAliasVariableName";
 import { convertRGBA } from "./color/convertRGBA";
 
 interface PropsI {
-  modeName: string;
   variableValue: any;
   variableType: VariableResolvedDataType;
   colorMode: colorModeType;
@@ -11,29 +10,22 @@ interface PropsI {
 }
 
 export const normalizeValue = (props: PropsI) => {
-  const {
-    modeName,
-    variableValue,
-    variableType,
-    colorMode,
-    isDTCGForamt,
-    includeValueAliasString,
-  } = props;
+  const { variableValue, variableType, colorMode } = props;
 
-  // console.log("variableValue", variableValue);
+  console.log("variableValue", variableValue);
 
   if (variableValue?.type === "VARIABLE_ALIAS") {
+    return variableValue;
     // console.log("VARIABLE_ALIAS", variableValue);
     // console.log("variables", variables);
-
-    const aliasVariableName = getAliasVariableName(
-      variableValue.id,
-      modeName,
-      isDTCGForamt,
-      includeValueAliasString
-    );
-
-    return aliasVariableName;
+    // const aliasVariableName = getAliasVariableName(
+    //   variableValue.id,
+    //   modeName,
+    //   modesAmount,
+    //   isDTCGForamt,
+    //   includeValueAliasString
+    // );
+    // return aliasVariableName;
   }
 
   if (variableType === "COLOR") {
