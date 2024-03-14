@@ -1,8 +1,8 @@
 import { normalizeValue } from "./normalizeValue";
 import { normilizeType } from "./normilizeType";
 import { getTokenKeyName } from "./getTokenKeyName";
-
 import { groupObjectNamesIntoCategories } from "./groupObjectNamesIntoCategories";
+import { adjustTokenName } from "./adjustTokenName";
 
 // console.clear();
 
@@ -19,7 +19,7 @@ export const variablesToTokens = async (
   // let mergedVariables = {};
   let emptyCollection = collections.map((collection) => {
     return {
-      [collection.name]: {},
+      [adjustTokenName(collection.name)]: {},
     };
   });
 
@@ -30,9 +30,9 @@ export const variablesToTokens = async (
     // console.log("variable", variable);
     // get collection object
     const collectionId = variable.variableCollectionId;
-    const collectionName = collections.find(
+    const collectionName = adjustTokenName(collections.find(
       (collection) => collection.id === collectionId
-    ).name;
+    ).name);
     const collectionDefaultModeId = collections.find(
       (collection) => collection.id === collectionId
     ).defaultModeId;
@@ -98,7 +98,7 @@ export const variablesToTokens = async (
     // place variable into collection
     emptyCollection = emptyCollection.map((collection) => {
       if (Object.keys(collection)[0] === collectionName) {
-        collection[collectionName][variable.name] = variableObject;
+        collection[collectionName][adjustTokenName(variable.name)] = variableObject;
       }
       return collection;
     });

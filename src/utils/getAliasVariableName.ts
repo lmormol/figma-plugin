@@ -1,3 +1,4 @@
+import { adjustTokenName } from "./adjustTokenName";
 import { getTokenKeyName } from "./getTokenKeyName";
 
 export const getAliasVariableName = (
@@ -11,8 +12,8 @@ export const getAliasVariableName = (
   ) as VariableCollection;
   // const modesAmount = collectionObj.modes.length;
 
-  const variableName = variableObj.name;
-  const collectionName = collectionObj.name;
+  const variableName = adjustTokenName(variableObj.name);
+  const collectionName = adjustTokenName(collectionObj.name);
 
   // console.log("collectionObj", collectionObj);
   // console.log("modeName", modeName);
@@ -21,10 +22,10 @@ export const getAliasVariableName = (
   const valueKey = getTokenKeyName(isDTCGForamt).value;
   const isValueKeyIncluded = includeValueAliasString ? `.${valueKey}` : "";
 
-  const variableParts = variableName.split("/");
+  const variableParts = variableName.split("/").map((part) => adjustTokenName(part));
   const aliasName = `{${collectionName}.${variableParts.join(
     "."
   )}${isValueKeyIncluded}}`;
 
-  return aliasName;
+  return adjustTokenName(aliasName);
 };

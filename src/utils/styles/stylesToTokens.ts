@@ -1,6 +1,7 @@
 import { textStylesToTokens } from "./textStylesToTokens";
 import { gridStylesToTokens } from "./gridStylesToTokens";
 import { effectStylesToTokens } from "./effectStylesToTokens";
+import { adjustTokenName } from "../adjustTokenName";
 
 interface iProps {
   includedStyles: IncludedStylesI;
@@ -19,7 +20,7 @@ export const stylesToTokens = async (props: iProps) => {
   // Extract text tokens
   if (includedStyles.text.isIncluded) {
     const textTokens = await textStylesToTokens(
-      includedStyles.text.customName,
+      adjustTokenName(includedStyles.text.customName),
       isDTCGForamt
     );
 
@@ -29,7 +30,7 @@ export const stylesToTokens = async (props: iProps) => {
   // Extract grid tokens
   if (includedStyles.grids.isIncluded) {
     const gridTokens = await gridStylesToTokens(
-      includedStyles.grids.customName,
+      adjustTokenName(includedStyles.grids.customName),
       isDTCGForamt
     );
 
@@ -39,7 +40,7 @@ export const stylesToTokens = async (props: iProps) => {
   // Extract effect tokens
   if (includedStyles.effects.isIncluded) {
     const effectTokens = await effectStylesToTokens(
-      includedStyles.effects.customName,
+      adjustTokenName(includedStyles.effects.customName),
       colorMode,
       isDTCGForamt
     );

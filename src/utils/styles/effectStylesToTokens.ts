@@ -1,6 +1,7 @@
 import { groupObjectNamesIntoCategories } from "../groupObjectNamesIntoCategories";
 import { convertRGBA } from "../color/convertRGBA";
 import { getTokenKeyName } from "../getTokenKeyName";
+import { adjustTokenName } from "../adjustTokenName";
 
 const wrapShadowObject = (
   shadowEffect: DropShadowEffect | InnerShadowEffect,
@@ -29,7 +30,7 @@ export const effectStylesToTokens = async (
   let effectTokens = {};
 
   const allEffectStyles = effectStyles.reduce((result, style) => {
-    const styleName = style.name;
+    const styleName = adjustTokenName(style.name);
     const effectType = style.effects[0].type;
 
     console.log(styleName, style.effects);

@@ -1,5 +1,6 @@
 import { groupObjectNamesIntoCategories } from "../groupObjectNamesIntoCategories";
 import { getTokenKeyName } from "../getTokenKeyName";
+import { adjustTokenName } from "../adjustTokenName";
 
 export const gridStylesToTokens = async (
   customName: string,
@@ -13,7 +14,7 @@ export const gridStylesToTokens = async (
   let textTokens = {};
 
   const allGridStyles = gridStyles.reduce((result, style) => {
-    const styleName = style.name;
+    const styleName = adjustTokenName(style.name);
     const firstTwoGrids = style.layoutGrids.slice(0, 2) as RowsColsLayoutGrid[];
 
     const columnGrid = firstTwoGrids[0];

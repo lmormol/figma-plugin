@@ -4,6 +4,7 @@ import { getLineHeight } from "../text/getLineHeight";
 import { getLetterSpacing } from "../text/getLetterSpacing";
 import { getFontWeight } from "../text/getFontWeight";
 import { getTokenKeyName } from "../getTokenKeyName";
+import { adjustTokenName } from "../adjustTokenName";
 
 export const textStylesToTokens = async (
   customName: string,
@@ -17,7 +18,7 @@ export const textStylesToTokens = async (
   let textTokens = {};
 
   const allTextStyles = textStyles.reduce((result, style) => {
-    const styleName = style.name;
+    const styleName = adjustTokenName(style.name);
 
     const styleObject = {
       [keyNames.type]: "typography",
